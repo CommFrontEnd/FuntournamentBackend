@@ -1,0 +1,10 @@
+Initialisation :
+
+-> Node JS
+Express (framework node)
+
+-> BDD
+Mongo DB
+
+-> NPM
+Nodeamon
