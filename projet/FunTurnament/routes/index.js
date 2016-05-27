@@ -3,8 +3,31 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.send("I am root");
+  res.send("I am root ! Mouahahahahahahahahahah !");
 });
+
+// CREER UN JOUEUR
+router.put('/user', function(req, res, next) {
+	var user = req.body.user
+	//vérifier unicité de l'email
+	if(user.name != undefined && user.firstName != undefined && user.email != undefined && user.password != undefined
+			&& (user.isSII === false || user.isSII === true)){
+		daoSetDB(req.db, "Users");
+		daoInsertInTable(user, function(data) {
+		if(!data.erreur){
+			res.send("Utilisateur ajouté en base");
+		}else{
+			res.send(data.message)
+		}
+	});
+	}else{
+		res.end("Un paramètre est invalide");
+	}
+});
+
+// CREER UN TOURNOI
+
+// CREER UNE EQUIPE
 
 
 router.get('/users', function(req, res, next) {
