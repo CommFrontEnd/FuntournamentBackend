@@ -12,6 +12,8 @@ var db = monk('localhost:27017/FUNTURNAMENT');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
+var dao = require('./dao/dao.js')
+
 var app = express();
 
 // view engine setup
@@ -49,10 +51,11 @@ app.use(function(req, res, next) {
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
-    res.render('error', {
+    /*res.render('error', {
       message: err.message,
       error: err
-    });
+    });*/
+	res.send(err.message);
   });
 }
 
