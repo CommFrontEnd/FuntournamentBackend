@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var dao = require('../dao/dao.js');
 
+
 /* GET users listing. */
 
 
@@ -14,8 +15,8 @@ router.put('/', function(req, res, next) {
 	//vérifier unicité de l'email
 	if(user.name != undefined && user.firstName != undefined && user.email != undefined && user.password != undefined
 			&& (user.isSII === false || user.isSII === true)){
-		daoSetDB(req.db, "Users");
-		daoInsertInTable(user, function(data) {
+		dao.daoSetDB(req.db, "Users");
+		dao.daoInsertInTable(user, function(data) {
 		if(!data.erreur){
 			res.send("Utilisateur ajouté en base");
 		}else{
@@ -28,8 +29,8 @@ router.put('/', function(req, res, next) {
 });
 
 router.get('/', function(req, res, next) {
-	daoSetDB(req.db, "Users");
-	daoFindInTable({}, function(data) {
+	dao.daoSetDB(req.db, "Users");
+	dao.daoFindInTable({}, function(data) {
 				console.log("data : "+data);
 				res.send(JSON.stringify(data));
 			});
