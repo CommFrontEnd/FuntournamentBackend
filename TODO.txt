@@ -1,0 +1,17 @@
+TODO :
+Installer Postman
+Méthode générique => Remove in table
+Test création user
+Suppression utilisateur
+Recherche utilisateur
+Maj user
+Définir structure évènement
+Créer évènement
+Ajouter utilisateur à un évènement
+Modifier évènement
+Rechercher évènement
+Rechercher tous les évènements
+Supprimer évènement
+
+
+DONE :

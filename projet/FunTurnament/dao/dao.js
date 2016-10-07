@@ -37,7 +37,7 @@ module.exports = (function(){
 	}
 
 
-	//Trouver des donnÃ©es dans la table en fonction d'un paramÃ¨tre
+	//Trouver des données dans la table en fonction d'un paramère
 	//_param de la forme : {"id" : value}
 	function daoFindInTable(_param, func)
 	{
@@ -47,20 +47,20 @@ module.exports = (function(){
 	}
 
 
-	//Mettre Ã  jour une donnÃ©e dans la table
+	//Mettre à jour une donnee dans la table
 	function daoUpdateTable(_query,_param, func)
 	{
 		collection.update(
 			_query,
 			_param,
 			function (err, result) {
-				if (err) func({ "erreur" : true, "message" : "Il y a un problÃ¨me pour insÃ©rer les donnÃ©es dans la base."});
+				if (err) func({ "erreur" : true, "message" : "Il y a un problème pour insérer les données dans la base."});
 				}
 			);
 	}
 
 
-	//Effacer la table en entiÃ¨re
+	//Effacer la table en entrée
 	// #DROPTABLE
 	function daoEraseTable()
 	{
