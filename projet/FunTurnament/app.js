@@ -11,6 +11,8 @@ var db = monk('localhost:27017/FUNTURNAMENT');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var authentication = require('./routes/authentication');
+
 
 var dao = require('./dao/dao.js')
 
@@ -34,6 +36,7 @@ app.use(function(req,res,next){
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/authentication', authentication);
 
 
 
