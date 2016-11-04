@@ -1,43 +1,58 @@
 var express = require('express');
 var router = express.Router();
-var dao = require('../dao/dao.js');
+var userService = require('../services/usersService.js');
 
 
 /* GET users listing. */
 var userController = {
 
 	createUser : function(req, res, next) {
-		var user = req.body.user
-		//vérifier unicité de l'email
-		if(!user.name && !user.firstName && !user.email && !user.password && typeof user.isSII === 'boolean'){
-			dao.daoSetDB(req.db, "Users");
-			dao.daoInsertInTable(user, function(data) {
-				if(!data.erreur){
-					res.send("Utilisateur ajouté en base");
-				}else{
-					res.send(data.message)
-				}
-			});
-		}else{
-			res.send("Un paramètre est invalide");
-		}
+
+		userService.createUser(req.db, req.body).then(function(data) {
+			res.send("Utilisateur ajouté en base");
+		}).catch(function(e){
+			res.send(e.message);
+		});
+		
 	},
 
 	findAllUser : function(req, res, next) {
-		dao.daoSetDB(req.db, "Users");
-		dao.daoFindInTable({}, function(data) {
-			res.send(JSON.stringify(data));
+
+		userService.findAllUser(req.db).then(function(data) {
+			res.send(data);
+		}).catch(function(e){
+			res.send(e.message);
 		});
+
 	},
 
 	findByEmail : function(req, res, next) {
-		dao.daoSetDB(req.db, "Users");
-		dao.daoFindInTable({email:req.params.email}, function(data) {
-			res.send(JSON.stringify(data));
+
+		userService.findByEmail(req.db,req.params).then(function(data) {
+			res.send(data);
+		}).catch(function(e){
+			res.send(e.message);
 		});
+
 	}
 
 }
+
+
+////////////
+
+function proxy(callback){
+	return function(req, res, next){
+		var _oldSend = res.send;
+		console.log("sorti");
+		res.send = function(_result){
+			var result = typeof _result === 'string' ? _result : JSON.stringify(_result);
+					console.log("sordsti");
+			return _oldSend(result);
+		}
+	};
+}
+
 
 //http://stackoverflow.com/questions/5797852/in-node-js-how-do-i-include-functions-from-my-other-files   <----
 
@@ -47,7 +62,7 @@ var userController = {
 }*/
 
 // CREER UN JOUEUR
-router.put('/', userController.createUser);
+router.post('/', userController.createUser);
 
 // FIND ALL
 router.get('/', userController.findAllUser);

@@ -2,7 +2,7 @@
 module.exports = (function(){
 	'use strict';
 	
-	var db;
+	var db ;
 	var collection;
 	
 	return {
@@ -22,27 +22,38 @@ module.exports = (function(){
 
 	//Insérer données dans la table
 	//_data de la forme : [ {"id" : "value"},{...} ]
-	function daoInsertInTable(_data, func)
+	function daoInsertInTable(_data)
 	{
-		collection.insert(		
-			_data,		
-			function(err, doc) {
-				if(err) {
-					func({ "erreur" : true, "message" : "Il y a un problème pour insérer les données dans la base."});
-				}
-				else {
-					func({ "erreur" : false, "message" : "succès !" });
-				}
-		})
+		return new Promise(function(resolve, reject){
+			collection.insert(
+				_data,
+				function(err, result) {
+					if(err) {
+						reject({"message" : "Il y a un problème pour insérer les données dans la base."});
+					} else {
+						resolve();
+					}
+			});
+		});
+
+		
 	}
 
 
 	//Trouver des données dans la table en fonction d'un paramère
 	//_param de la forme : {"id" : value}
-	function daoFindInTable(_param, func)
+	function daoFindInTable(_param)
 	{
-		collection.find(_param, function(e,docs){			
-			func(docs);
+		return new Promise(function(resolve, reject){
+			collection.find(
+				_param,
+				function(err, result) {
+					if(err) {
+						reject({"message" : "Aucune donnée ne correspond."});
+					} else {
+						resolve(result);
+					}
+			});
 		});
 	}
 
@@ -50,13 +61,18 @@ module.exports = (function(){
 	//Mettre à jour une donnee dans la table
 	function daoUpdateTable(_query,_param, func)
 	{
-		collection.update(
-			_query,
-			_param,
-			function (err, result) {
-				if (err) func({ "erreur" : true, "message" : "Il y a un problème pour insérer les données dans la base."});
-				}
-			);
+		return new Promise(function(resolve, reject){
+			collection.update(
+				_query,
+				_param,
+				function(err, result) {
+					if(err) {
+						reject({"message" : "Il y a un problème pour insérer les données dans la base."});
+					} else {
+						resolve();
+					}
+			});
+		});
 	}
 
 
@@ -64,7 +80,16 @@ module.exports = (function(){
 	// #DROPTABLE
 	function daoEraseTable()
 	{
-		collection.drop();
+		return new Promise(function(resolve, reject){
+			collection.drop(
+				function(err, result) {
+					if(err) {
+						reject({"message" : "Il y a un problème pour supprimer les données dans la base."});
+					} else {
+						resolve()
+					}
+			});
+		});
 	}
 
 })();
