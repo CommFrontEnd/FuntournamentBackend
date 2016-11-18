@@ -1,4 +1,5 @@
-var dao = require('../dao/dao.js');
+var config = require('../config.js');
+var dao = require('../dao/dao.js').setDB(config.db.collections.user);
 
 module.exports =  (function(){
 	'use strict';
@@ -11,21 +12,18 @@ module.exports =  (function(){
 
 	////////////
 
-	function findAllUser(db) {
-		dao.daoSetDB(db, "Users");
-		return dao.daoFindInTable({});
+	function findAllUser() {
+		return dao.findInTable({});
 	}
 
-	function findByEmail(db, params) {
-		dao.daoSetDB(db, "Users");
-		return dao.daoFindInTable({email:params.email});
+	function findByEmail(params) {
+		return dao.findInTable({email:params.email});
 	}
 
-	function createUser (db, user) {
-		dao.daoSetDB(db, "Users");
+	function createUser (user) {
 		return _isUserValid(user)
 			.then(function(){
-				return findByEmail(db, user.email);
+				return findByEmail(user.email);
 			})
 			.then(function(data){
 				return _doInsertUser(data, user);
@@ -47,7 +45,7 @@ module.exports =  (function(){
 	function _doInsertUser(data, user){
 		console.log("inside _doInsertUser with data : " + data); 
 		if(!data || data.length === 0 ){
-			return dao.daoInsertInTable(user);
+			return dao.insertInTable(user);
 		}
 		return null;
 	}

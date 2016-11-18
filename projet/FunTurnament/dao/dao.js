@@ -1,28 +1,34 @@
+
+
 //============================= DAO =============================
 module.exports = (function(){
 	'use strict';
-	
-	var db ;
+
+	//MONGODB
+	//var mongo = require('mongodb');
+	var monk = require('monk');
+	var config = require('../config');
+	var db = monk(config.db.connectionString);
+
 	var collection;
 	
 	return {
-		daoSetDB : daoSetDB,
-		daoInsertInTable : daoInsertInTable,
-		daoFindInTable : daoFindInTable,
-		daoUpdateTable : daoUpdateTable,
-		daoEraseTable : daoEraseTable
+		setDB : setDB,
+		insertInTable : insertInTable,
+		findInTable : findInTable,
+		updateTable : updateTable,
+		eraseTable : eraseTable
 	};
-
 	//Paramétrer la base utilisée lors des prochaines commandes
-	function daoSetDB(_db, _collection)
+	function setDB(_collection)
 	{
-		db = _db;
 		collection = db.get(_collection);
+		return this;
 	}
 
 	//Insérer données dans la table
 	//_data de la forme : [ {"id" : "value"},{...} ]
-	function daoInsertInTable(_data)
+	function insertInTable(_data)
 	{
 		return new Promise(function(resolve, reject){
 			collection.insert(
@@ -42,7 +48,7 @@ module.exports = (function(){
 
 	//Trouver des données dans la table en fonction d'un paramère
 	//_param de la forme : {"id" : value}
-	function daoFindInTable(_param)
+	function findInTable(_param)
 	{
 		return new Promise(function(resolve, reject){
 			collection.find(
@@ -59,7 +65,7 @@ module.exports = (function(){
 
 
 	//Mettre à jour une donnee dans la table
-	function daoUpdateTable(_query,_param, func)
+	function updateTable(_query,_param, func)
 	{
 		return new Promise(function(resolve, reject){
 			collection.update(
@@ -78,7 +84,7 @@ module.exports = (function(){
 
 	//Effacer la table en entrée
 	// #DROPTABLE
-	function daoEraseTable()
+	function eraseTable()
 	{
 		return new Promise(function(resolve, reject){
 			collection.drop(

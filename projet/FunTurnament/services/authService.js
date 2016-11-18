@@ -1,4 +1,5 @@
-var dao = require('../dao/dao.js');
+var config = require('../config.js');
+var dao = require('../dao/dao.js').setDB(config.db.collections.user);
 
 module.exports =  (function(){
 	'use strict';
@@ -10,15 +11,14 @@ module.exports =  (function(){
 	////////////
 
 	function authenticateUser(db, userAuthentication) {
-		dao.daoSetDB(db, "Users");
 		return _isAuthenticationValid(userAuthentication).then(function(){
-			return dao.daoFindInTable(db, {email:authentication.email, password:authentication.password});
+			return dao.findInTable({email:userAuthentication.email, password:userAuthentication.password});
 		});
 	}
 
 	function _isAuthenticationValid(userAuthentication){
 		return new Promise(function(resolve, reject){
-			if(!!authentication.email && !!authentication.password){
+			if(!!userAuthentication.email && !!userAuthentication.password){
 				resolve();
 			}else{
 				reject({

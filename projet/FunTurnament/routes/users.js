@@ -8,7 +8,7 @@ var userController = {
 
 	createUser : function(req, res, next) {
 
-		userService.createUser(req.db, req.body).then(function(data) {
+		userService.createUser(req.body).then(function(data) {
 			res.send("Utilisateur ajouté en base");
 		}).catch(function(e){
 			res.send(e.message);
@@ -17,8 +17,8 @@ var userController = {
 	},
 
 	findAllUser : function(req, res, next) {
-
-		userService.findAllUser(req.db).then(function(data) {
+			
+		userService.findAllUser().then(function(data) {
 			res.send(data);
 		}).catch(function(e){
 			res.send(e.message);
@@ -28,7 +28,7 @@ var userController = {
 
 	findByEmail : function(req, res, next) {
 
-		userService.findByEmail(req.db,req.params).then(function(data) {
+		userService.findByEmail(req.params).then(function(data) {
 			res.send(data);
 		}).catch(function(e){
 			res.send(e.message);
@@ -44,12 +44,13 @@ var userController = {
 function proxy(callback){
 	return function(req, res, next){
 		var _oldSend = res.send;
-		console.log("sorti");
-		res.send = function(_result){
+		res.send = function(_result){	
 			var result = typeof _result === 'string' ? _result : JSON.stringify(_result);
-					console.log("sordsti");
+					console.log("sordsti " +_result);
 			return _oldSend(result);
-		}
+		};
+
+		callback();
 	};
 }
 
