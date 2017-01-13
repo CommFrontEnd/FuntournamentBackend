@@ -1,19 +1,26 @@
 var config = require('../config.js');
 var dao = require('../dao/dao.js').setDB(config.db.collections.user);
 
-module.exports =  (function(){
+module.exports =  (function(){	
 	'use strict';
 
 	return {
 		findAllUser : findAllUser,
 		findByEmail : findByEmail,
-		createUser : createUser
+		createUser : createUser,
+		deleteUser : deleteUser
 	};
 
 	////////////
 
 	function findAllUser() {
 		return dao.findInTable({});
+	}
+
+	function deleteUser(params) {
+		return findByEmail(params).then(function(){
+			return dao.deleteInTable({email:params.email});
+		});
 	}
 
 	function findByEmail(params) {
@@ -23,7 +30,7 @@ module.exports =  (function(){
 	function createUser (user) {
 		return _isUserValid(user)
 			.then(function(){
-				return findByEmail(user.email);
+				return findByEmail(user);
 			})
 			.then(function(data){
 				return _doInsertUser(data, user);
@@ -43,11 +50,16 @@ module.exports =  (function(){
 	}
 
 	function _doInsertUser(data, user){
-		console.log("inside _doInsertUser with data : " + data); 
-		if(!data || data.length === 0 ){
-			return dao.insertInTable(user);
-		}
-		return null;
+		return new Promise(function(resolve, reject){
+			if(!data || data.length === 0 ){
+				dao.insertInTable(user);
+				resolve();
+			}else{
+				reject({
+					message : 'Un utilisateur existe déjà avec cet email'
+				});
+			}
+		});
 	}
 
 })();

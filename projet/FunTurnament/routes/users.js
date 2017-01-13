@@ -12,7 +12,7 @@ var userController = {
 			res.send("Utilisateur ajouté en base");
 		}).catch(function(e){
 			res.send(e.message);
-		});
+		});	
 		
 	},
 
@@ -24,15 +24,23 @@ var userController = {
 			res.send(e.message);
 		});
 
-	},
+	},	
 
 	findByEmail : function(req, res, next) {
-
 		userService.findByEmail(req.params).then(function(data) {
 			res.send(data);
 		}).catch(function(e){
 			res.send(e.message);
 		});
+
+	},
+
+	deleteUser : function(req, res, next) {
+		userService.deleteUser(req.params).then(function(data) {
+			res.send("Utilisateur supprimé ");
+		}).catch(function(e){
+			res.send(e.message);
+		}); 
 
 	}
 
@@ -70,5 +78,8 @@ router.get('/', userController.findAllUser);
 
 // FIND BY EMAIL
 router.get('/:email', userController.findByEmail);
+
+// Supprimer UN JOUEUR
+router.delete('/:email', userController.deleteUser);
 
 module.exports = router;

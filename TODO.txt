@@ -1,11 +1,8 @@
 TODO :
 
-
-Ajouter les promesses sur l'existant
-
 Créer un dao par type
+Faire une doc
 
-Suppression utilisateur
 Recherche utilisateur
 Maj user
 

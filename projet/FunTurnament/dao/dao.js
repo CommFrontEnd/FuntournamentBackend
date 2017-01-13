@@ -14,10 +14,11 @@ module.exports = (function(){
 	
 	return {
 		setDB : setDB,
-		insertInTable : insertInTable,
-		findInTable : findInTable,
+		insertInTable : insertInTable	,
+		findInTable : findInTable,	
 		updateTable : updateTable,
-		eraseTable : eraseTable
+		eraseTable : eraseTable,
+		deleteInTable : deleteInTable
 	};
 	//Paramétrer la base utilisée lors des prochaines commandes
 	function setDB(_collection)
@@ -95,6 +96,21 @@ module.exports = (function(){
 						resolve()
 					}
 			});
+		});
+	}
+
+	function deleteInTable (_param){
+		return new Promise(function(resolve, reject){
+			collection.remove(
+			_param,
+				function(err, result) {
+					if(err) {
+						reject({"message" : "Aucune donnée à supprimer ne correspond."});
+					} else {
+						resolve(result);
+					}
+				}
+			);
 		});
 	}
 
