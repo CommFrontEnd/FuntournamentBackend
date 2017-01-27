@@ -4,7 +4,8 @@ Créer un dao par type
 Faire une doc
 
 Recherche utilisateur
-Maj user
+Maj user => TODO reject si non trouvé, finir _doUpdateUser
+MAJ Delete => retour différent si utilisateur non trouvé
 
 Définir structure évènement
 Créer évènement
