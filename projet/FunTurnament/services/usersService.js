@@ -8,7 +8,8 @@ module.exports =  (function(){
 		findAllUser : findAllUser,
 		findByEmail : findByEmail,
 		createUser : createUser,
-		deleteUser : deleteUser
+		deleteUser : deleteUser,
+		updateUser : updateUser
 	};
 
 	////////////
@@ -24,6 +25,7 @@ module.exports =  (function(){
 	}
 
 	function findByEmail(params) {
+		//TODO reject si non trouvé
 		return dao.findInTable({email:params.email});
 	}
 
@@ -34,6 +36,19 @@ module.exports =  (function(){
 			})
 			.then(function(data){
 				return _doInsertUser(data, user);
+			});
+	}
+
+	function updateUser(user){
+		return _isUserValid(user)
+			.then(function(){
+				return findByEmail(user);
+			})
+			.then(function(){
+				return findById(user);
+			})
+			.then(function(data){
+				return _doUpdateUser(data, user);
 			});
 	}
 
@@ -60,6 +75,23 @@ module.exports =  (function(){
 				});
 			}
 		});
+	}
+
+	function findById(){
+		//TODO reject si non trouvé
+		return dao.findInTable({email:params._id});
+	}
+
+	function _doUpdateUser(data,user) {
+		if(!data || data.length === 0 ){
+			// TODO finish update
+				dao.updateTable(user);
+				resolve();
+			}else{
+				reject({
+					message : 'Un utilisateur existe déjà avec cet email'
+				});
+			}
 	}
 
 })();
