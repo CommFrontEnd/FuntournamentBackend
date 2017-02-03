@@ -1,5 +1,5 @@
 var config = require('../config.js');
-var dao = require('../dao/dao.js').setDB(config.db.collections.user);
+var dao = require('../dao/dao.js')
 
 module.exports =  (function(){
 	'use strict';
@@ -9,6 +9,10 @@ module.exports =  (function(){
 	};
 
 	////////////
+
+	function myDao(method, params){
+		dao.setDB(config.db.collections.user)[method].apply(null, params);
+	}
 
 	function authenticateUser(db, userAuthentication) {
 		return _isAuthenticationValid(userAuthentication).then(function(){

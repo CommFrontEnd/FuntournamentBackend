@@ -1,5 +1,5 @@
 var config = require('../config.js');
-var dao = require('../dao/dao.js').setDB(config.db.collections.event);
+var dao = require('../dao/dao.js');
 
 module.exports =  (function(){	
 	'use strict';
@@ -15,8 +15,12 @@ module.exports =  (function(){
 
 	////////////
 
+	function myDao(method, params){
+		return dao.setDB(config.db.collections.event)[method].apply(null, params);
+	}
+
 	function findAllEvent() {
-		return dao.findInTable({});
+		return myDao("findInTable",{});
 	}
 
 	function findById(params) {

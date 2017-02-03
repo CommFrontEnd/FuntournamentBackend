@@ -1,5 +1,5 @@
 var config = require('../config.js');
-var dao = require('../dao/dao.js').setDB(config.db.collections.user);
+var dao = require('../dao/dao.js');
 
 module.exports =  (function(){	
 	'use strict';
@@ -13,20 +13,25 @@ module.exports =  (function(){
 	};
 
 	////////////
+	function myDao(method, params){
+		return dao.setDB(config.db.collections.user)[method](params);
+	}
 
 	function findAllUser() {
-		return dao.findInTable({});
+		console.log("user");
+		return myDao("findInTable",{});
 	}
 
 	function deleteUser(params) {
 		return findByEmail(params).then(function(){
-			return dao.deleteInTable({email:params.email});
+			return myDao("deleteInTable",{email:params.email});
 		});
 	}
 
 	function findByEmail(params) {
+		console.log(params);
 		//TODO reject si non trouvé
-		return dao.findInTable({email:params.email});
+		return myDao("findInTable",{email:params.email});
 	}
 
 	function createUser (user) {
@@ -50,7 +55,7 @@ module.exports =  (function(){
 			.then(function(data){
 				return _doUpdateUser(data, user);
 			});
-	}
+	}	
 
 	function _isUserValid(user){
 		return new Promise(function(resolve, reject){
@@ -67,7 +72,7 @@ module.exports =  (function(){
 	function _doInsertUser(data, user){
 		return new Promise(function(resolve, reject){
 			if(!data || data.length === 0 ){
-				dao.insertInTable(user);
+				myDao("insertInTable",{user});
 				resolve();
 			}else{
 				reject({
@@ -85,7 +90,7 @@ module.exports =  (function(){
 	function _doUpdateUser(data,user) {
 		if(!data || data.length === 0 ){
 			// TODO finish update
-				dao.updateTable(user);
+				myDao("updateTable",{user});
 				resolve();
 			}else{
 				reject({

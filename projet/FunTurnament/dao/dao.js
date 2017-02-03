@@ -52,7 +52,7 @@ module.exports = (function(){
 	function findInTable(_param)
 	{
 		return new Promise(function(resolve, reject){
-			console.log(collection);
+			console.log(_param);
 			collection.find(
 				_param,
 				function(err, result) {

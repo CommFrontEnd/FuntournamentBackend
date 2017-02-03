@@ -1,13 +1,12 @@
 TODO :
 
-Créer un dao par type
 Faire une doc
 
 Recherche utilisateur
 Maj user => TODO reject si non trouvé, finir _doUpdateUser
 MAJ Delete => retour différent si utilisateur non trouvé
 
-Définir structure évènement
+Structure => MAJ Wrapper DAO
 Créer évènement
 Ajouter utilisateur à un évènement
 Modifier évènement
