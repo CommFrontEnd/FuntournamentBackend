@@ -16,7 +16,7 @@ module.exports =  (function(){
 	////////////
 
 	function myDao(method, params){
-		return dao.setDB(config.db.collections.event)[method].apply(null, params);
+		return dao.setDB(config.db.collections.event)[method](params);
 	}
 
 	function findAllEvent() {
@@ -24,11 +24,11 @@ module.exports =  (function(){
 	}
 
 	function findById(params) {
-		return dao.findInTable({_id:params._id});
+		return myDao("findInTable",{_id:params._id});
 	}
 
 	function findByType(params) {
-		return dao.findInTable({type:params.type});
+		return myDao("findInTable",{type:params.type});
 	}
 
 	function createEvent (event) {
@@ -40,7 +40,7 @@ module.exports =  (function(){
 
 	function deleteEvent(params) {
 		return findById(params).then(function(){
-			return dao.deleteInTable({_id:params._id});
+			return myDao("deleteInTable",{_id:params._id});
 		});
 	}
 
@@ -63,7 +63,7 @@ module.exports =  (function(){
 	function _doInsertEvent(data, event){
 		return new Promise(function(resolve, reject){
 			if(!data || data.length === 0 ){
-				dao.insertInTable(event);
+				myDao("insertInTable",event);
 				resolve();
 			}else{
 				reject({

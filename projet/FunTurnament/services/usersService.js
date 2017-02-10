@@ -18,18 +18,19 @@ module.exports =  (function(){
 	}
 
 	function findAllUser() {
-		console.log("user");
 		return myDao("findInTable",{});
 	}
 
 	function deleteUser(params) {
-		return findByEmail(params).then(function(){
-			return myDao("deleteInTable",{email:params.email});
-		});
+		return findByEmail(params).then(function(result){
+				return _isExist(result, false);
+			})
+			.then(function(){
+				return myDao("deleteInTable",{email:params.email});
+			});
 	}
 
 	function findByEmail(params) {
-		console.log(params);
 		//TODO reject si non trouvé
 		return myDao("findInTable",{email:params.email});
 	}
@@ -69,10 +70,26 @@ module.exports =  (function(){
 		});
 	}
 
+	function _isExist(result, rejectIfFind){
+		return new Promise(function(resolve, reject){
+			if((result.length > 0 && rejectIfFind)) {
+				reject({
+					message : 'Elément existant'
+				});
+			}else if(result.length === 0 && !rejectIfFind){
+				reject({
+					message : 'Elément inexistant'
+				});
+			}else{
+				resolve();
+			}
+		});
+	}
+
 	function _doInsertUser(data, user){
 		return new Promise(function(resolve, reject){
 			if(!data || data.length === 0 ){
-				myDao("insertInTable",{user});
+				myDao("insertInTable", user);
 				resolve();
 			}else{
 				reject({

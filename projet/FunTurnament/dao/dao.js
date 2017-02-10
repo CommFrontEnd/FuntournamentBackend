@@ -56,6 +56,7 @@ module.exports = (function(){
 			collection.find(
 				_param,
 				function(err, result) {
+					console.log("findInTable :" + result);
 					if(err) {
 						reject({"message" : "Aucune donnée ne correspond."});
 					} else {
