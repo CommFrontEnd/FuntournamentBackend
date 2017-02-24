@@ -24,7 +24,7 @@ module.exports =  (function(){
 	}
 
 	function findById(params) {
-		return myDao("findInTable",{_id:params._id});
+		return myDao("findInTable",{_id:params.id});
 	}
 
 	function findByType(params) {
@@ -39,8 +39,11 @@ module.exports =  (function(){
 	}
 
 	function deleteEvent(params) {
-		return findById(params).then(function(){
-			return myDao("deleteInTable",{_id:params._id});
+		return findById(params)
+			.then(function(result){
+				return _isExist(result, false);
+			}).then(function(){
+			return myDao("deleteInTable",{_id:params.id});
 		});
 	}
 
@@ -69,6 +72,22 @@ module.exports =  (function(){
 				reject({
 					message : 'Un événement existe déjà avec ce nom'
 				});
+			}
+		});
+	}
+
+	function _isExist(result, rejectIfFind){
+		return new Promise(function(resolve, reject){
+			if((result.length > 0 && rejectIfFind)) {
+				reject({
+					message : 'Elément existant'
+				});
+			}else if(result.length === 0 && !rejectIfFind){
+				reject({
+					message : 'Elément inexistant'
+				});
+			}else{
+				resolve();
 			}
 		});
 	}

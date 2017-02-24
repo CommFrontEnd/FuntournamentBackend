@@ -31,7 +31,6 @@ module.exports =  (function(){
 	}
 
 	function findByEmail(params) {
-		//TODO reject si non trouvé
 		return myDao("findInTable",{email:params.email});
 	}
 

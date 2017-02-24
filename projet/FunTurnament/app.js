@@ -31,7 +31,7 @@ app.use(function(req,res,next){
 
 app.use('/', routes);
 app.use('/users', users);
-app.use('/events', events);
+app.use('/event', events);
 app.use('/authentication', authentication);
 
 
