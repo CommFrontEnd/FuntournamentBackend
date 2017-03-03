@@ -59,7 +59,7 @@ module.exports =  (function(){
 
 	function _isUserValid(user){
 		return new Promise(function(resolve, reject){
-			if(!!user.name && !!user.firstName && !!user.email && !!user.password && typeof user.isSII === 'boolean'){
+			if(user.name && user.firstName && user.email && user.password && typeof user.isSII === 'boolean'){
 				resolve();
 			}else{
 				reject({
