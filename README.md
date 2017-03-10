@@ -1,6 +1,7 @@
 # FuntournamentBackend
 Backend of Funtournament project
 
+<<<<<<< HEAD
 Pré-requis :
 - installer node
 - installer mongoDB
@@ -13,6 +14,8 @@ Démarrage serveur + base :
 - se placer dans le répertoire "projet/FunTournament" et ouvrir une console Windows
 - démarrer le serveur avec la commande "npm run startdev".
 
+=======
+>>>>>>> 8d40eba701c1da8ce860cf889febe639f1018f40
 # Data Structures : 
 user : 
 - name (string)
@@ -31,3 +34,16 @@ event :
 - type (string ==> "foot", "bad", "babyfoot")
 - teams (team[])
 
+<<<<<<< HEAD
+=======
+Démarrage serveur + base :
+
+- démarrer la base de données en exécutant le fichier de commande "projet\start_mongo.bat"
+
+- se placer dans le répertoire "projet/FunTournament" et ouvrir une console Windows
+- avant le premier lancement, exécuter "npm install" pour installer toutes les dépendances définies dans "package.json"
+- démarrer le serveur avec la commande "npm run startdev".
+
+
+Le serveur est alors lancé et accessible sur le port 3000. Le répertoire routes contient les contrôleurs.
+>>>>>>> 8d40eba701c1da8ce860cf889febe639f1018f40
