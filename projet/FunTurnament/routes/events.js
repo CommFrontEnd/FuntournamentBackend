@@ -51,8 +51,15 @@ var eventController = {
 			res.send(e.message);
 		}); 
 
-	}
+	},
 
+	updateEvent : function(req, res, next) {
+		eventService.updateEvent(req.body).then(function(data) {
+			res.send("Evenement modifié ");
+		}).catch(function(e){
+			res.send(e.message);
+		}); 
+	}
 }
 
 
@@ -65,7 +72,7 @@ var eventController = {
 	{ route : '/', method :'put', service : eventController.createEvent}
 }*/
 
-// CREER UN JOUEUR
+// CREER UN EVENEMENT
 router.post('/', eventController.createEvent);
 
 // FIND ALL
@@ -77,7 +84,10 @@ router.get('/:id', eventController.findById);
 // FIND BY TYPE
 router.get('/:type', eventController.findByType);
 
-// Supprimer UN JOUEUR
+// SUPPRIMER UN EVENEMENT
 router.delete('/:id', eventController.deleteEvent);
+
+// MODIFICATION D'UN EVENEMENT
+router.put('/', eventController.updateEvent);
 
 module.exports = router;
