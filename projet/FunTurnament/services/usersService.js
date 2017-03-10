@@ -47,18 +47,11 @@ module.exports =  (function(){
 	function updateUser(user){
 		return _isUserValid(user)
 			.then(function(){
-<<<<<<< HEAD
-				return findByEmail(user);
-			})
-			.then(function(){
-				return findById(user); // TODO remlacer par isExist => cf delete
-=======
 				console.log(user);
 				return findByEmail(user);
 			})
 			.then(function(){
 				return _isExist(user);
->>>>>>> 8d40eba701c1da8ce860cf889febe639f1018f40
 			})
 			.then(function(data){
 				return _doUpdateUser(data, user);
