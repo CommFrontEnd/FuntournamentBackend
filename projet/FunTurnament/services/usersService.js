@@ -47,10 +47,11 @@ module.exports =  (function(){
 	function updateUser(user){
 		return _isUserValid(user)
 			.then(function(){
+				console.log(user);
 				return findByEmail(user);
 			})
 			.then(function(){
-				return findById(user);
+				return _isExist(user);
 			})
 			.then(function(data){
 				return _doUpdateUser(data, user);
