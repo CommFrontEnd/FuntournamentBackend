@@ -48,7 +48,16 @@ module.exports =  (function(){
 	}
 
 	function updateEvent(params) {
-		//TODO
+		return _isEventValid(params)
+			.then(function(){
+				return findById(params);
+			})
+			.then(function(result){
+				return _isExist(result, false);
+			})
+			.then(function(){
+				return _doUpdateEvent(params);
+			});
 	}
 
 	function _isEventValid(event){
@@ -77,6 +86,8 @@ module.exports =  (function(){
 	}
 
 	function _isExist(result, rejectIfFind){
+		console.log("_isExist ==> Result = ");
+		console.log(result);
 		return new Promise(function(resolve, reject){
 			if((result.length > 0 && rejectIfFind)) {
 				reject({
@@ -90,6 +101,11 @@ module.exports =  (function(){
 				resolve();
 			}
 		});
+	}
+
+	function _doUpdateEvent(event) {
+		// TODO : Corriger bug d'enregistrement de la donnée en base
+		myDao("updateTable",{event});
 	}
 
 })();
