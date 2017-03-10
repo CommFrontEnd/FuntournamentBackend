@@ -70,6 +70,7 @@ module.exports =  (function(){
 		});
 	}
 
+	// TODO : Mettre dans une classe util + ajouter message paramétré
 	function _isExist(result, rejectIfFind){
 		return new Promise(function(resolve, reject){
 			if((result.length > 0 && rejectIfFind)) {
@@ -88,7 +89,7 @@ module.exports =  (function(){
 
 	function _doInsertUser(data, user){
 		return new Promise(function(resolve, reject){
-			if(!data || data.length === 0 ){
+			if(!data || data.length === 0 ){ // TODO : supprimer test
 				myDao("insertInTable", user);
 				resolve();
 			}else{
@@ -100,12 +101,12 @@ module.exports =  (function(){
 	}
 
 	function findById(){
-		//TODO reject si non trouvé
+		//TODO si appelé par route => ajouter isExist
 		return dao.findInTable({email:params._id});
 	}
 
 	function _doUpdateUser(data,user) {
-		if(!data || data.length === 0 ){
+		if(!data || data.length === 0 ){ // TODO : supprimer test
 			// TODO finish update
 				myDao("updateTable",{user});
 				resolve();
