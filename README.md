@@ -13,4 +13,21 @@ Démarrage serveur + base :
 - se placer dans le répertoire "projet/FunTournament" et ouvrir une console Windows
 - démarrer le serveur avec la commande "npm run startdev".
 
-Le serveur est alors lancé et accessible sur le port 3000. Le répertoire routes contient les contrôleurs.
+# Data Structures : 
+user : 
+- name (string)
+- firstName (string)
+- password (string)
+- isSII (boolean)
+- email (string)
+
+team : 
+- users (user[])
+- score
+
+event : 
+- name 
+- date (string ==> "DD/MM/YYYY")
+- type (string ==> "foot", "bad", "babyfoot")
+- teams (team[])
+

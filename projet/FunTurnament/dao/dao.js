@@ -52,9 +52,11 @@ module.exports = (function(){
 	function findInTable(_param)
 	{
 		return new Promise(function(resolve, reject){
+			console.log(_param);
 			collection.find(
 				_param,
 				function(err, result) {
+					console.log("findInTable :" + result);
 					if(err) {
 						reject({"message" : "Aucune donnée ne correspond."});
 					} else {

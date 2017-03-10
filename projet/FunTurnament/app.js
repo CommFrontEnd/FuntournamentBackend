@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var events = require('./routes/events');
 var authentication = require('./routes/authentication');
 
 
@@ -30,6 +31,7 @@ app.use(function(req,res,next){
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/event', events);
 app.use('/authentication', authentication);
 
 

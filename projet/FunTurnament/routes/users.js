@@ -42,6 +42,16 @@ var userController = {
 			res.send(e.message);
 		}); 
 
+	},
+
+	updateUser : function(req, res, next) {
+
+		userService.updateUser(req.body).then(function(data) {
+			res.send("Utilisateur mis à jour en base");
+		}).catch(function(e){
+			res.send(e.message);
+		});	
+		
 	}
 
 }
@@ -81,5 +91,8 @@ router.get('/:email', userController.findByEmail);
 
 // Supprimer UN JOUEUR
 router.delete('/:email', userController.deleteUser);
+
+// MAJ UN JOUEUR
+router.put('/', userController.updateUser);
 
 module.exports = router;
