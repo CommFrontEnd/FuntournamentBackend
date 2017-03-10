@@ -70,13 +70,17 @@ module.exports = (function(){
 	//Mettre à jour une donnee dans la table
 	function updateTable(_query,_param, func)
 	{
+		console.log("updateTable");
+		console.log(_query);
+		console.log(_param);
+		console.log(func);
 		return new Promise(function(resolve, reject){
 			collection.update(
 				_query,
 				_param,
 				function(err, result) {
 					if(err) {
-						reject({"message" : "Il y a un problème pour insérer les données dans la base."});
+						reject({"message" : "Il y a un problème pour mettre à jour les données dans la base."+err});
 					} else {
 						resolve();
 					}

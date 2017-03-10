@@ -14,6 +14,8 @@ module.exports =  (function(){
 
 	////////////
 	function myDao(method, params){
+		console.log("updateTable");
+		console.log(_query);
 		return dao.setDB(config.db.collections.user)[method](params);
 	}
 
@@ -22,12 +24,9 @@ module.exports =  (function(){
 	}
 
 	function deleteUser(params) {
-		return findByEmail(params).then(function(result){
-				return _isExist(result, false);
-			})
-			.then(function(){
-				return myDao("deleteInTable",{email:params.email});
-			});
+		return findByEmail(params)
+			.then(result => _isExist(result, true))
+			.then(() => _doDeleteUserByEmail(params.email));
 	}
 
 	function findByEmail(params) {
@@ -36,26 +35,16 @@ module.exports =  (function(){
 
 	function createUser (user) {
 		return _isUserValid(user)
-			.then(function(){
-				return findByEmail(user);
-			})
-			.then(function(data){
-				return _doInsertUser(data, user);
-			});
+			.then(() => findByEmail(user))
+			.then(result => _isExist(result, true))
+			.then(() => _doInsertUser(user));
 	}
 
 	function updateUser(user){
 		return _isUserValid(user)
-			.then(function(){
-				console.log(user);
-				return findByEmail(user);
-			})
-			.then(function(){
-				return _isExist(user);
-			})
-			.then(function(data){
-				return _doUpdateUser(data, user);
-			});
+			.then(() => findById(user))
+			.then(result => _isExist(result, false))
+			.then(() => _doUpdateUser(user));
 	}	
 
 	function _isUserValid(user){
@@ -71,7 +60,7 @@ module.exports =  (function(){
 	}
 
 	// TODO : Mettre dans une classe util + ajouter message paramétré
-	function _isExist(result, rejectIfFind){
+	function _isExist(result, rejectIfFind, messageIfExist, messageIfNotExist){
 		return new Promise(function(resolve, reject){
 			if((result.length > 0 && rejectIfFind)) {
 				reject({
@@ -87,34 +76,20 @@ module.exports =  (function(){
 		});
 	}
 
-	function _doInsertUser(data, user){
-		return new Promise(function(resolve, reject){
-			if(!data || data.length === 0 ){ // TODO : supprimer test
-				myDao("insertInTable", user);
-				resolve();
-			}else{
-				reject({
-					message : 'Un utilisateur existe déjà avec cet email'
-				});
-			}
-		});
+	function _doInsertUser(user){
+		return myDao("insertInTable", user);
 	}
 
-	function findById(){
-		//TODO si appelé par route => ajouter isExist
-		return dao.findInTable({email:params._id});
+	function _doDeleteUserByEmail(email){
+		return myDao("deleteInTable",{email:email});
 	}
 
-	function _doUpdateUser(data,user) {
-		if(!data || data.length === 0 ){ // TODO : supprimer test
-			// TODO finish update
-				myDao("updateTable",{user});
-				resolve();
-			}else{
-				reject({
-					message : 'Un utilisateur existe déjà avec cet email'
-				});
-			}
+	function findById(user){
+		return myDao("findInTable", {_id:user._id});
+	}
+
+	function _doUpdateUser(user) {
+		return myDao("updateTable", {_id:user._id}, user);
 	}
 
 })();
