@@ -6,7 +6,7 @@ var authService = require('../services/authService.js');
 var authenticationController = {
 
 	authenticate : function(req, res, next) {
-
+		console.log("auth1");
 		authService.authenticateUser(req.db, req.body.authentication).then(function(data) {
 			res.send(data);
 		}).catch(function(e){

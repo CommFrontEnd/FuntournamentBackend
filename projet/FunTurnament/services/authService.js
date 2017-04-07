@@ -11,12 +11,12 @@ module.exports =  (function(){
 	////////////
 
 	function myDao(method, params){
-		dao.setDB(config.db.collections.user)[method].apply(null, params);
+		return dao.setDB(config.db.collections.user)[method](params);
 	}
 
 	function authenticateUser(db, userAuthentication) {
 		return _isAuthenticationValid(userAuthentication).then(function(){
-			return dao.findInTable({email:userAuthentication.email, password:userAuthentication.password});
+			return myDao("findInTable",{email:userAuthentication.email, password:userAuthentication.password});
 		});
 	}
 

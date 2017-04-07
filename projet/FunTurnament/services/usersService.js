@@ -14,8 +14,6 @@ module.exports =  (function(){
 
 	////////////
 	function myDao(method, params){
-		console.log("updateTable");
-		console.log(_query);
 		return dao.setDB(config.db.collections.user)[method](params);
 	}
 
@@ -25,7 +23,7 @@ module.exports =  (function(){
 
 	function deleteUser(params) {
 		return findByEmail(params)
-			.then(result => _isExist(result, true))
+			.then(result => _isExist(result, false))
 			.then(() => _doDeleteUserByEmail(params.email));
 	}
 
