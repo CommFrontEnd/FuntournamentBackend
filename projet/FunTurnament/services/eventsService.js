@@ -6,7 +6,7 @@ module.exports =  (function(){
 
 	return {
 		findAllEvent : findAllEvent,
-		findById : findById,
+		findEvent : findEvent,
 		findByType : findByType,
 		createEvent : createEvent,
 		deleteEvent : deleteEvent,
@@ -15,16 +15,17 @@ module.exports =  (function(){
 
 	////////////
 
-	function myDao(method, params){
-		return dao.setDB(config.db.collections.event)[method](params);
+	function myDao(method, params, body){
+		return dao.setDB(config.db.collections.event)[method](params, body);
 	}
 
 	function findAllEvent() {
 		return myDao("findInTable",{});
 	}
 
-	function findById(params) {
-		return myDao("findInTable",{_id:params.id});
+	function findEvent(params) {
+		return _findById(params.id)
+			.then(result => _isExist(result, false));
 	}
 
 	function findByType(params) {
@@ -33,31 +34,20 @@ module.exports =  (function(){
 
 	function createEvent (event) {
 		return _isEventValid(event)
-			.then(function(data){
-				return _doInsertEvent(data, event);
-			});
+			.then(() => _doInsertEvent(event));
 	}
 
 	function deleteEvent(params) {
-		return findById(params)
-			.then(function(result){
-				return _isExist(result, false);
-			}).then(function(){
-			return myDao("deleteInTable",{_id:params.id});
-		});
+		return _findById(params.id)
+			.then(result => _isExist(result, false))
+			.then(() => _doDeleteEventById(params.id));
 	}
 
 	function updateEvent(params) {
 		return _isEventValid(params)
-			.then(function(){
-				return findById(params);
-			})
-			.then(function(result){
-				return _isExist(result, false);
-			})
-			.then(function(){
-				return _doUpdateEvent(params);
-			});
+			.then(() => _findById(params._id))
+			.then(result => _isExist(result, false))
+			.then(() => _doUpdateEvent(params));
 	}
 
 	function _isEventValid(event){
@@ -72,22 +62,11 @@ module.exports =  (function(){
 		});
 	}
 
-	function _doInsertEvent(data, event){
-		return new Promise(function(resolve, reject){
-			if(!data || data.length === 0 ){
-				myDao("insertInTable",event);
-				resolve();
-			}else{
-				reject({
-					message : 'Un événement existe déjà avec ce nom'
-				});
-			}
-		});
+	function _doInsertEvent(event){
+		return myDao("insertInTable", event);
 	}
 
-	function _isExist(result, rejectIfFind){
-		console.log("_isExist ==> Result = ");
-		console.log(result);
+	function _isExist(result, rejectIfFind, messageIfExist, messageIfNotExist){
 		return new Promise(function(resolve, reject){
 			if((result.length > 0 && rejectIfFind)) {
 				reject({
@@ -98,14 +77,21 @@ module.exports =  (function(){
 					message : 'Elément inexistant'
 				});
 			}else{
-				resolve();
+				resolve(result);
 			}
 		});
 	}
 
 	function _doUpdateEvent(event) {
-		// TODO : Corriger bug d'enregistrement de la donnée en base
-		myDao("updateTable",{event});
+		myDao("updateTable",{_id:event._id}, event);
+	}
+
+	function _findById(id) {
+		return myDao("findInTable",{_id:id});
+	}
+
+	function _doDeleteEventById(id){
+		return myDao("deleteInTable",{_id:id});
 	}
 
 })();

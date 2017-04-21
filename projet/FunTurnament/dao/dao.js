@@ -52,7 +52,6 @@ module.exports = (function(){
 	function findInTable(_param)
 	{
 		return new Promise(function(resolve, reject){
-			console.log(_param);
 			collection.find(
 				_param,
 				function(err, result) {
@@ -68,16 +67,12 @@ module.exports = (function(){
 
 
 	//Mettre à jour une donnee dans la table
-	function updateTable(_query,_param, func)
+	function updateTable(matcher,body)
 	{
-		console.log("updateTable");
-		console.log(_query);
-		console.log(_param);
-		console.log(func);
 		return new Promise(function(resolve, reject){
 			collection.update(
-				_query,
-				_param,
+				matcher,
+				body,
 				function(err, result) {
 					if(err) {
 						reject({"message" : "Il y a un problème pour mettre à jour les données dans la base."+err});

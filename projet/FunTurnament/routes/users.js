@@ -26,8 +26,8 @@ var userController = {
 
 	},	
 
-	findByEmail : function(req, res, next) {
-		userService.findByEmail(req.params).then(function(data) {
+	findUser : function(req, res, next) {
+		userService.findUser(req.params).then(function(data) {
 			res.send(data);
 		}).catch(function(e){
 			res.send(e.message);
@@ -87,7 +87,7 @@ router.post('/', userController.createUser);
 router.get('/', userController.findAllUser);
 
 // FIND BY EMAIL
-router.get('/:email', userController.findByEmail);
+router.get('/:email', userController.findUser);
 
 // Supprimer UN JOUEUR
 router.delete('/:email', userController.deleteUser);

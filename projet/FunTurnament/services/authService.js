@@ -15,10 +15,14 @@ module.exports =  (function(){
 	}
 
 	function authenticateUser(db, userAuthentication) {
-		return _isAuthenticationValid(userAuthentication).then(function(){
-			return myDao("findInTable",{email:userAuthentication.email, password:userAuthentication.password});
-		});
+		return _isAuthenticationValid(userAuthentication)
+			.then(() => _verifyCredentials(userAuthentication))
+			.then(result => _isExist(result, false));
 	}
+
+	function _verifyCredentials(params) {
+		return myDao("findInTable",{email:userAuthentication.email, password:userAuthentication.password});
+	} 
 
 	function _isAuthenticationValid(userAuthentication){
 		return new Promise(function(resolve, reject){
@@ -28,6 +32,22 @@ module.exports =  (function(){
 				reject({
 					message : 'Les informations de connexion sont invalides'
 				});
+			}
+		});
+	}
+
+	function _isExist(result, rejectIfFind, messageIfExist, messageIfNotExist){
+		return new Promise(function(resolve, reject){
+			if((result.length > 0 && rejectIfFind)) {
+				reject({
+					message : 'Elément existant'
+				});
+			}else if(result.length === 0 && !rejectIfFind){
+				reject({
+					message : 'Elément inexistant'
+				});
+			}else{
+				resolve();
 			}
 		});
 	}

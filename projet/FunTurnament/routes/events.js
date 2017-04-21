@@ -9,7 +9,7 @@ var eventController = {
 	createEvent : function(req, res, next) {
 
 		eventService.createEvent(req.body).then(function(data) {
-			res.send("Evenement ajouté en base");
+			res.send("Evénement ajouté en base");
 		}).catch(function(e){
 			res.send(e.message);
 		});	
@@ -26,8 +26,8 @@ var eventController = {
 
 	},	
 
-	findById : function(req, res, next) {
-		eventService.findById(req.params).then(function(data) {
+	findEvent : function(req, res, next) {
+		eventService.findEvent(req.params).then(function(data) {
 			res.send(data);
 		}).catch(function(e){
 			res.send(e.message);
@@ -46,7 +46,7 @@ var eventController = {
 
 	deleteEvent : function(req, res, next) {
 		eventService.deleteEvent(req.params).then(function(data) {
-			res.send("Evenement supprimé ");
+			res.send("Evénement supprimé ");
 		}).catch(function(e){
 			res.send(e.message);
 		}); 
@@ -55,7 +55,7 @@ var eventController = {
 
 	updateEvent : function(req, res, next) {
 		eventService.updateEvent(req.body).then(function(data) {
-			res.send("Evenement modifié ");
+			res.send("Evénement modifié ");
 		}).catch(function(e){
 			res.send(e.message);
 		}); 
@@ -79,7 +79,7 @@ router.post('/', eventController.createEvent);
 router.get('/', eventController.findAllEvent);
 
 // FIND BY ID
-router.get('/:id', eventController.findById);
+router.get('/:id', eventController.findEvent);
 
 // FIND BY TYPE
 router.get('/:type', eventController.findByType);

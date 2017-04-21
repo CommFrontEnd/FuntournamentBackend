@@ -6,15 +6,15 @@ module.exports =  (function(){
 
 	return {
 		findAllUser : findAllUser,
-		findByEmail : findByEmail,
+		findUser : findUser,
 		createUser : createUser,
 		deleteUser : deleteUser,
 		updateUser : updateUser
 	};
 
 	////////////
-	function myDao(method, params){
-		return dao.setDB(config.db.collections.user)[method](params);
+	function myDao(method, params, body){
+		return dao.setDB(config.db.collections.user)[method](params, body);
 	}
 
 	function findAllUser() {
@@ -22,25 +22,28 @@ module.exports =  (function(){
 	}
 
 	function deleteUser(params) {
-		return findByEmail(params)
+		return _findByEmail(params)
 			.then(result => _isExist(result, false))
 			.then(() => _doDeleteUserByEmail(params.email));
 	}
 
-	function findByEmail(params) {
-		return myDao("findInTable",{email:params.email});
+	function findUser(params) {
+		return _findByEmail(params)
+			.then(result => _isExist(result, false));
 	}
+
+	
 
 	function createUser (user) {
 		return _isUserValid(user)
-			.then(() => findByEmail(user))
+			.then(() => _findByEmail(user))
 			.then(result => _isExist(result, true))
 			.then(() => _doInsertUser(user));
 	}
 
 	function updateUser(user){
 		return _isUserValid(user)
-			.then(() => findById(user))
+			.then(() => _findById(user))
 			.then(result => _isExist(result, false))
 			.then(() => _doUpdateUser(user));
 	}	
@@ -69,7 +72,7 @@ module.exports =  (function(){
 					message : 'Elément inexistant'
 				});
 			}else{
-				resolve();
+				resolve(result);
 			}
 		});
 	}
@@ -82,12 +85,16 @@ module.exports =  (function(){
 		return myDao("deleteInTable",{email:email});
 	}
 
-	function findById(user){
+	function _findById(user){
 		return myDao("findInTable", {_id:user._id});
 	}
 
 	function _doUpdateUser(user) {
 		return myDao("updateTable", {_id:user._id}, user);
+	}
+
+	function _findByEmail(params) {
+		return myDao("findInTable",{email:params.email});
 	}
 
 })();
